@@ -17,7 +17,6 @@ public class Movie {
     private String genre;
     private double rating;
 
-
     public Long getId() {
         return id;
     }
