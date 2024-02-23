@@ -1,11 +1,10 @@
 package org.example.jakarta_labb.repository;
 
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import se.iths.restdemo.entity.Person;
+import org.example.jakarta_labb.entity.Person;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,8 +17,8 @@ public class PersonRepository implements Serializable {
 
     public List<Person> all() {
         return entityManager
-                .createQuery("select p from Person p", Person.class)
-                .getResultList();
+            .createQuery("select p from Person p", Person.class)
+            .getResultList();
     }
 
     @Transactional
