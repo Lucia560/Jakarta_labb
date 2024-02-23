@@ -1,0 +1,18 @@
+
+services:
+
+  wildfly:
+    build: .
+    container_name: "wildfly"
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+
+  postgres:
+    image: postgres:16.2
+    container_name: "postgres"
+    environment:
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_DB=jakarta_labb"
+    ports:
+      - "5432:5432"
