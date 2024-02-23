@@ -57,7 +57,4 @@ public class Movie {
     public void setRating(double rating) {
         this.rating = rating;
     }
-
-    // Lägg till fler metoder ifall det behövs
-
 }
