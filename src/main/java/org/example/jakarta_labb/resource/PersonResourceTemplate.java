@@ -4,31 +4,31 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.example.jakarta_labb.dto.PersonDto;
-import org.example.jakarta_labb.dto.Persons;
-import org.example.jakarta_labb.repository.PersonRepository;
+import org.example.jakarta_labb.dto.PersonDtoTemplate;
+import org.example.jakarta_labb.dto.PersonsTemplate;
+import org.example.jakarta_labb.repository.PersonRepositoryTemplate;
 
 import java.net.URI;
 import java.time.LocalDateTime;
 
 @Path("persons")
-public class PersonResource {
+public class PersonResourceTemplate {
 
-    private PersonRepository personRepository;
+    private PersonRepositoryTemplate personRepository;
 
-    public PersonResource() {
+    public PersonResourceTemplate() {
     }
 
     @Inject
-    public PersonResource(PersonRepository personRepository) {
+    public PersonResourceTemplate(PersonRepositoryTemplate personRepository) {
         this.personRepository = personRepository;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Persons all() {
-        return new Persons(
-            personRepository.all().stream().map(PersonDto::map).toList(),
+    public PersonsTemplate all() {
+        return new PersonsTemplate(
+            personRepository.all().stream().map(PersonDtoTemplate::map).toList(),
             LocalDateTime.now());
     }
 
@@ -36,19 +36,19 @@ public class PersonResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public PersonDto one(@PathParam("id") long id) {
+    public PersonDtoTemplate one(@PathParam("id") long id) {
         var person = personRepository.findById(id);
         if (person == null)
             throw new NotFoundException("Invalid id " + id);
-        return PersonDto.map(person);
+        return PersonDtoTemplate.map(person);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     //@Produces(MediaType.APPLICATION_JSON)
-    public Response create(PersonDto personDto) {
+    public Response create(PersonDtoTemplate personDto) {
         //Save to database
-        var p = personRepository.add(PersonDto.map(personDto));
+        var p = personRepository.add(PersonDtoTemplate.map(personDto));
 
         return Response.created(
                 //Ask Jakarta application server for hostname and url path
