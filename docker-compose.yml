@@ -4,9 +4,9 @@ services:
   wildfly:
     build: .
     container_name: "wildfly"
-    ports:
-      - "8080:8080"
-      - "9990:9990"
+    network_mode: "host"
+    hostname: "localhost"
+    command: "/opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0"
 
   postgres:
     image: postgres:16.2
