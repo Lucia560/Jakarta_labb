@@ -3,7 +3,7 @@ package org.example.jakarta_labb;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MovieTest {
+class MovieTest {
 
     @Test
     void testIdGetterAndSetter() {
