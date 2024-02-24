@@ -2,6 +2,7 @@ package org.example.jakarta_labb.resource;
 
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Response;
+import org.example.jakarta_labb.resource.HelloResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
