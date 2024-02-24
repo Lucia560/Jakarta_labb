@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MovieResourceTest extends JerseyTest {
+class HelloResourceTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(MovieResource.class);
+        return new ResourceConfig(HelloResource.class);
     }
 
     @Override
