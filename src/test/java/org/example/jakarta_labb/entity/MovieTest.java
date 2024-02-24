@@ -2,6 +2,9 @@ package org.example.jakarta_labb.entity;
 
 import org.example.jakarta_labb.entity.Movie;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MovieTest {
@@ -9,8 +12,9 @@ class MovieTest {
     @Test
     void testIdGetterAndSetter() {
         Movie movie = new Movie();
-        movie.setId(1L);
-        assertEquals(1L, movie.getId());
+        UUID uuid = UUID.randomUUID();
+        movie.setId(uuid);
+        assertEquals(uuid, movie.getId());
     }
 
     @Test

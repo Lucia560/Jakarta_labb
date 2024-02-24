@@ -1,8 +1,7 @@
-package org.example.jakarta_labb;
+package org.example.jakarta_labb.resource;
 
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Response;
-import org.example.jakarta_labb.resource.HelloResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
@@ -13,11 +12,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class HelloResourceTest extends JerseyTest {
+class MovieResourceTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(HelloResource.class);
+        return new ResourceConfig(MovieResource.class);
     }
 
     @Override

@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.example.jakarta_labb.entity.Movie;
 
 import java.util.List;
+import java.util.UUID;
 
 @ApplicationScoped
 public class MovieRepository {
@@ -26,7 +27,7 @@ public class MovieRepository {
         return movie;
     }
 
-    public Movie findMovieById(Long id) {
+    public Movie findMovieById(UUID id) {
         return entityManager.find(Movie.class, id);
     }
 
