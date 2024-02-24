@@ -1,4 +1,4 @@
-package org.example.jakarta_labb;
+package org.example.jakarta_labb.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +11,6 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private int releaseYear;
     private String genre;
