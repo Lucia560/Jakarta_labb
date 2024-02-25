@@ -25,47 +25,31 @@
             <version>10.0.0</version>
             <scope>provided</scope>
         </dependency>
-       <dependency>
+        <dependency>
              <groupId>org.junit.jupiter</groupId>
              <artifactId>junit-jupiter-api</artifactId>
              <version>${junit.version}</version>
              <scope>test</scope>
-         </dependency>
+        </dependency>
          <dependency>
              <groupId>org.junit.jupiter</groupId>
              <artifactId>junit-jupiter-engine</artifactId>
              <version>${junit.version}</version>
              <scope>test</scope>
          </dependency>
-
-    <!-- Jersey Test Frameworks -->
-    <dependency>
+         <dependency>
       <groupId>org.glassfish.jersey.test-framework.providers</groupId>
       <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
       <version>3.1.5</version>
       <scope>test</scope>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.test-framework.providers</groupId>
       <artifactId>jersey-test-framework-provider-jetty</artifactId>
       <version>3.1.5</version>
       <scope>test</scope>
     </dependency>
-    <!-- Jakarta API for WebSocket -->
-   <!-- <dependency>
-      <groupId>jakarta.websocket</groupId>
-      <artifactId>jakarta.websocket-api</artifactId>
-      <version>2.2.0-M1</version>
-      <scope>test</scope>
-    </dependency> -->
-
-   <!-- <dependency>
-      <groupId>jakarta.ws.rs</groupId>
-      <artifactId>jakarta.ws.rs-api</artifactId>
-      <version>2.1.6</version>
-      <scope>test</scope>
-    </dependency> -->
-  </dependencies>
+    </dependencies>
 
      <build>
          <plugins>
