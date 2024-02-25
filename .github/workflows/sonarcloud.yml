@@ -32,11 +32,6 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-       - name: Analyze with SonarCloud
-         uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
-         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
        - name: Build and analyze
          run: mvn -B verify sonar:sonar -Dsonar.projectKey=Lucia560_Jakarta_Labb -Dsonar.organization=lucia560 -Dsonar.jacoco.reportPaths=target/jacoco.exec
