@@ -33,8 +33,10 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
 
+
+
        - name: Build and analyze
-         run: mvn -B verify sonar:sonar -Dsonar.projectKey=Lucia560_Jakarta_Labb -Dsonar.organization=lucia560 -Dsonar.jacoco.reportPaths=target/jacoco.exec
+         run: mvn -B verify org.sonarsource.scanner.maven:sonar:sonar -Dsonar.projectKey=Lucia560_Jakarta_Labb -Dsonar.organization=lucia560 -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
          env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
