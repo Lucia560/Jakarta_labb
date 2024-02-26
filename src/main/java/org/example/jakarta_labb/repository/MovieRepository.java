@@ -12,7 +12,7 @@ import java.util.UUID;
 @ApplicationScoped
 public class MovieRepository {
 
-    @PersistenceContext(unitName = "mysql")
+    @PersistenceContext(unitName = "postgresql")
     private EntityManager entityManager;
 
     public List<Movie> findAllMovies() {
