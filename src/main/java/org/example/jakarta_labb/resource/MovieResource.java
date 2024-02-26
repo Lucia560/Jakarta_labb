@@ -14,8 +14,12 @@ import java.util.UUID;
 @Consumes(MediaType.APPLICATION_JSON)
 public class MovieResource {
 
+    private final MovieRepository movieRepository;
+
     @Inject
-    private MovieRepository movieRepository;
+    public MovieResource(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+    }
 
     @GET
     public List<Movie> getAllMovies() {

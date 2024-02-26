@@ -21,14 +21,14 @@ public class MovieRepository {
             .getResultList();
     }
 
+    public Movie findMovieById(UUID id) {
+        return entityManager.find(Movie.class, id);
+    }
+
     @Transactional
     public Movie saveMovie(Movie movie) {
         entityManager.persist(movie);
         return movie;
-    }
-
-    public Movie findMovieById(UUID id) {
-        return entityManager.find(Movie.class, id);
     }
 
     @Transactional
