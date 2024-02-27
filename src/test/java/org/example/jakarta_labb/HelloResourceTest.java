@@ -1,4 +1,4 @@
-package org.example.jakarta_labb.resource;
+package org.example.jakarta_labb;
 
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Response;

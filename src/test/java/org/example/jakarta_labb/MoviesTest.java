@@ -1,7 +1,9 @@
-package org.example.jakarta_labb.dto;
+package org.example.jakarta_labb;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.example.jakarta_labb.dto.MovieDto;
+import org.example.jakarta_labb.dto.Movies;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
