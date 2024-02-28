@@ -2,4 +2,4 @@ module add --name=org.postgres --resources=postgresql-42.2.5.jar --dependencies=
 
 /subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres",driver-module-name="org.postgres",driver-class-name=org.postgresql.Driver)
 
-data-source add --jndi-name=java:/PostGreDS --name=PostgresDS --connection-url=jdbc:postgresql://localhost/jakarta_labb --driver-name=postgres --user-name=postgres --password=postgres
+data-source add --jndi-name=java:/PostGreDS --name=PostgresDS --connection-url=jdbc:postgresql://postgres/jakarta_labb --driver-name=postgres --user-name=postgres --password=postgres
