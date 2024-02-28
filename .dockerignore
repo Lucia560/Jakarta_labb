@@ -1,5 +1,5 @@
 # Maven artifacts and build directories
-target/
+#target/
 .mvn/
 
 # Git configuration and repository information
