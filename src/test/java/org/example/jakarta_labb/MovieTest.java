@@ -1,5 +1,6 @@
-package org.example.jakarta_labb.entity;
+package org.example.jakarta_labb;
 
+import org.example.jakarta_labb.entity.Movie;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
