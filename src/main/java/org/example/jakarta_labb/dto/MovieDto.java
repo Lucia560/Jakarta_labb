@@ -2,13 +2,14 @@ package org.example.jakarta_labb.dto;
 
 import jakarta.validation.constraints.*;
 import org.example.jakarta_labb.entity.Movie;
+import org.example.jakarta_labb.validate.CustomReleaseYear;
 
 import java.util.UUID;
 
 public record MovieDto(UUID uuid,
                        @NotEmpty String name,
                        @NotEmpty String genre,
-                       @Min(1900) int releaseYear,
+                       @CustomReleaseYear(message = "Year can only be between 1900 and current") int releaseYear,
                        @DecimalMin("0.0") @DecimalMax("10.0") double rating) {
 
     public static Movie map(MovieDto movieDto) {
