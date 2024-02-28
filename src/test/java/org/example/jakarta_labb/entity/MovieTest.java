@@ -1,4 +1,4 @@
-package org.example.jakarta_labb;
+package org.example.jakarta_labb.entity;
 
 import org.example.jakarta_labb.entity.Movie;
 import org.junit.jupiter.api.Test;
