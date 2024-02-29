@@ -13,4 +13,20 @@ class MovieExceptionMapperTest {
         assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
         assertEquals("Movie not found", response.getEntity());
     }
+
+    @Test
+    void testMovieValidationException() {
+        MovieValidationException exception = new MovieValidationException("Invalid input");
+        Response response = exceptionMapper.toResponse(exception);
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals("Invalid input", response.getEntity());
+    }
+
+    @Test
+    void testMovieExceptionForInternalServerError() {
+        MovieException exception = new MovieException("Some other exception");
+        Response response = exceptionMapper.toResponse(exception);
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals("Internal server error", response.getEntity());
+    }
 }

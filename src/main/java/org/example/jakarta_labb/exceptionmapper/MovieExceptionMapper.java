@@ -6,7 +6,6 @@ import jakarta.ws.rs.ext.Provider;
 
 @Provider
 public class MovieExceptionMapper implements ExceptionMapper<MovieException> {
-
     @Override
     public Response toResponse(MovieException exception) {
         if (exception instanceof MovieNotFoundException) {
