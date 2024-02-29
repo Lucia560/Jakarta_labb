@@ -21,3 +21,9 @@ jobs:
           cache: maven
       - name: Test
         run: mvn -B test --no-transfer-progress
+      - name: Cleanup merged branches
+        run: |
+          git fetch --prune
+          for branch in $(git branch --merged | grep -v "main"); do
+            git push origin --delete "$branch"
+          done
