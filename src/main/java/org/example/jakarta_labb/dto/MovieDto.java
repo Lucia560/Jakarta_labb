@@ -22,6 +22,10 @@ public record MovieDto(UUID uuid,
         return movie;
     }
 
+    public static MovieDto fromEntity(Movie movie){
+        return new MovieDto(movie.getId(), movie.getTitle(),movie.getGenre(), movie.getReleaseYear(), movie.getRating());
+    }
+
     public static class MovieBuilder {
         private UUID uuid;
         private String name;

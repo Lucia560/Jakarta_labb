@@ -30,6 +30,10 @@ public class MovieRepository {
         entityManager.persist(movie);
         return movie;
     }
+    @Transactional
+    public Movie updateMovie(Movie movie) {
+        return entityManager.merge(movie);
+    }
 
     @Transactional
     public void deleteMovie(Movie movie) {
