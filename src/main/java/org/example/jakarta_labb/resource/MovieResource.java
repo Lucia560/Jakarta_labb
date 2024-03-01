@@ -3,6 +3,7 @@ package org.example.jakarta_labb.resource;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.example.jakarta_labb.dto.MovieDto;
 import org.example.jakarta_labb.entity.Movie;
 import org.example.jakarta_labb.repository.MovieRepository;
 
@@ -24,8 +25,9 @@ public class MovieResource {
 
     @GET
     @Path("/{id}")
-    public Movie getMovieById(@PathParam("id") UUID id) {
-        return movieRepository.findMovieById(id);
+    public MovieDto getMovieById(@PathParam("id") UUID id) {
+        Movie movie = movieRepository.findMovieById(id);
+        MovieDto movieDto =
     }
 
     @POST
