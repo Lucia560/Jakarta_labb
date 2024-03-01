@@ -22,34 +22,34 @@ public record MovieDto(UUID uuid,
         return movie;
     }
 
-    public static class Builder {
+    public static class MovieBuilder {
         private UUID uuid;
         private String name;
         private String genre;
         private int releaseYear;
         private double rating;
 
-        public Builder uuid(UUID uuid) {
+        public MovieBuilder uuid(UUID uuid) {
             this.uuid = uuid;
             return this;
         }
 
-        public Builder name(String name) {
+        public MovieBuilder name(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder genre(String genre) {
+        public MovieBuilder genre(String genre) {
             this.genre = genre;
             return this;
         }
 
-        public Builder releaseYear(int releaseYear) {
+        public MovieBuilder releaseYear(int releaseYear) {
             this.releaseYear = releaseYear;
             return this;
         }
 
-        public Builder rating(double rating) {
+        public MovieBuilder rating(double rating) {
             this.rating = rating;
             return this;
         }
@@ -59,7 +59,7 @@ public record MovieDto(UUID uuid,
         }
     }
 
-    public static MovieDto.Builder builder() {
-        return new MovieDto.Builder();
+    public static MovieBuilder builder() {
+        return new MovieBuilder();
     }
 }
