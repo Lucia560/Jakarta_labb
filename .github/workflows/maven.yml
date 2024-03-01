@@ -21,3 +21,8 @@ jobs:
           cache: maven
       - name: Test
         run: mvn -B test --no-transfer-progress
+      - name: Cleanup merged branches
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        run: |
+          git fetch --prune
+          git push origin --delete "${{ github.event.pull_request.head.ref }}"
