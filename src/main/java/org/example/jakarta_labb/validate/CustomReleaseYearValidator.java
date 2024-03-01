@@ -3,10 +3,9 @@ package org.example.jakarta_labb.validate;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class CustomReleaseYearValidator implements ConstraintValidator<ReleaseYear, LocalDate> {
+public class CustomReleaseYearValidator implements ConstraintValidator<ReleaseYear, Integer> {
 
     @Override
     public void initialize(ReleaseYear constraintAnnotation) {
@@ -14,10 +13,9 @@ public class CustomReleaseYearValidator implements ConstraintValidator<ReleaseYe
     }
 
     @Override
-    public boolean isValid(LocalDate releaseYear, ConstraintValidatorContext context) {
-        int year = releaseYear.getYear();
+    public boolean isValid(Integer releaseYear, ConstraintValidatorContext context) {
         int currentYear = getCurrentYear();
-        return year >= 1900 && year <= currentYear;
+        return releaseYear >= 1900 && releaseYear <= currentYear;
     }
 
     public static int getCurrentYear() {

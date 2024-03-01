@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -32,8 +30,8 @@ class CustomReleaseYearValidatorTest {
     @Test
     @DisplayName("Should return true for release year within valid range")
     void shouldReturnTrueForValidReleaseYear() {
-        LocalDate validReleaseYear1 = LocalDate.of(1900, 1, 1);
-        LocalDate validReleaseYear2 = LocalDate.of(2024, 1, 1);
+        int validReleaseYear1 = 1900;
+        int validReleaseYear2 = 2024;
         assertTrue(validator.isValid(validReleaseYear1, null));
         assertTrue(validator.isValid(validReleaseYear2, null));
     }
@@ -41,8 +39,8 @@ class CustomReleaseYearValidatorTest {
     @Test
     @DisplayName("Should return false for release year outside valid range")
     void shouldReturnFalseForInvalidReleaseYear() {
-        LocalDate invalidReleaseYear1 = LocalDate.of(1899, 1, 1);
-        LocalDate invalidReleaseYear2 = LocalDate.of(2100, 1, 1);
+        int invalidReleaseYear1 = 1899;
+        int invalidReleaseYear2 = 2100;
         assertFalse(validator.isValid(invalidReleaseYear1, null));
         assertFalse(validator.isValid(invalidReleaseYear2, null));
     }
