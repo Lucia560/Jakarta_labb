@@ -5,8 +5,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/Lucia560/Jakarta_labb?color=yellow)
 
 ## Description
-This project involves developing a RESTful Web service using the JAX-RS API. The service will be deployed on a WildFly application server, utilizing the Jakarta EE platform.
-
+This project involves developing a RESTful Web service using the JAX-RS API, with a specific focus on movie-related data. The service will be deployed on a WildFly application server, utilizing the Jakarta EE platform.
 ## Docker
 
 To build the docker image:
