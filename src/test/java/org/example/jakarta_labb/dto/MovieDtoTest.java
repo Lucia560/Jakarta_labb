@@ -1,4 +1,4 @@
-package org.example.jakarta_labb;
+package org.example.jakarta_labb.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
