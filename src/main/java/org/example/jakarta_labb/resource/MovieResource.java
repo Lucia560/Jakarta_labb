@@ -5,8 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.example.jakarta_labb.dto.MovieDto;
 import org.example.jakarta_labb.dto.Movies;
-import org.example.jakarta_labb.entity.Movie;
-import org.example.jakarta_labb.repository.MovieRepository;
+import org.example.jakarta_labb.service.MovieService;
 
 import java.util.UUID;
 
@@ -16,52 +15,33 @@ import java.util.UUID;
 public class MovieResource {
 
     @Inject
-    private MovieRepository movieRepository;
+    private MovieService movieService;
 
     @GET
     public Movies getAllMovies() {
-        return Movies.fromMovies(movieRepository.findAllMovies());
+        return movieService.getAllMovies();
     }
 
     @GET
     @Path("/{id}")
     public MovieDto getMovieById(@PathParam("id") UUID id) {
-        Movie movie = movieRepository.findMovieById(id);
-        MovieDto movieDto = MovieDto.fromEntity(movie);
-        return movieDto;
+        return movieService.getMovieById(id);
     }
 
     @POST
     public MovieDto addMovie(MovieDto movieDto) {
-        Movie movie = MovieDto.map(movieDto);
-        Movie savedMovie = movieRepository.saveMovie(movie);
-        MovieDto savedMovieDto = MovieDto.fromEntity(savedMovie);
-        return savedMovieDto;
+        return movieService.addMovie(movieDto);
     }
 
     @PUT
     @Path("/{id}")
     public MovieDto updateMovie(@PathParam("id") UUID id, MovieDto movieDto) {
-        Movie movie = movieRepository.findMovieById(id);
-
-        movie.setTitle(movie.getTitle());
-        movie.setGenre(movieDto.genre());
-        movie.setReleaseYear(movieDto.releaseYear());
-        movie.setRating(movieDto.rating());
-
-        Movie updateMovie = movieRepository.updateMovie(movie);
-        MovieDto updatedMovieDto = MovieDto.fromEntity(updateMovie);
-        return updatedMovieDto;
+        return movieService.updateMovie(id, movieDto);
     }
 
     @DELETE
     @Path("/{id}")
     public void deleteMovie(@PathParam("id") UUID id) {
-        Movie movie = movieRepository.findMovieById(id);
-        if (movie != null) {
-            movieRepository.deleteMovie(movie);
-        } else {
-            throw new NotFoundException("Movie not found with id: " + id);
-        }
+        movieService.deleteMovie(id);
     }
 }
