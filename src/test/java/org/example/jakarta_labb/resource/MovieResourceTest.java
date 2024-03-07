@@ -135,8 +135,7 @@ class MovieResourceTest {
         MockHttpResponse response = new MockHttpResponse();
         dispatcher.invoke(request, response);
 
-        assertEquals(500, response.getStatus()); // Assuming you have a handler that converts exceptions to status 500
+        assertEquals(500, response.getStatus());
     }
-
 
 }
