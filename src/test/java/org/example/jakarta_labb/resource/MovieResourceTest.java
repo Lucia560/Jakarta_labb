@@ -2,6 +2,7 @@ package org.example.jakarta_labb.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.MediaType;
 import org.example.jakarta_labb.dto.MovieDto;
 import org.example.jakarta_labb.dto.Movies;
@@ -25,6 +26,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class MovieResourceTest {
@@ -45,14 +49,14 @@ class MovieResourceTest {
     }
 
     @Test
-    public void moviesReturnsWithStatus200()  throws Exception{
+    public void moviesReturnsWithStatus200() throws Exception {
         when(movieService.getAllMovies()).thenReturn(new Movies(List.of(), LocalDateTime.now()));
 
         MockHttpRequest request = MockHttpRequest.get("/movies");
         MockHttpResponse response = new MockHttpResponse();
-        dispatcher.invoke(request,response);
+        dispatcher.invoke(request, response);
 
-        assertEquals(200,response.getStatus());
+        assertEquals(200, response.getStatus());
         assertEquals("{\"movieDtos\":[],\"updated\"}", response.getContentAsString());
     }
 
@@ -63,7 +67,7 @@ class MovieResourceTest {
         UUID testUUID = UUID.randomUUID();
         MovieDto movieDto = new MovieDto(testUUID, "I am dead ", "Action", 2021, 8.5);
 
-        when(movieService.getMovieById(Mockito.any(UUID.class))).thenReturn(movieDto);
+        when(movieService.getMovieById(any(UUID.class))).thenReturn(movieDto);
 
         MockHttpRequest request = MockHttpRequest.get("/movies/" + testUUID.toString());
         MockHttpResponse response = new MockHttpResponse();
@@ -78,7 +82,7 @@ class MovieResourceTest {
     void addMovieReturnsStatus200() throws URISyntaxException, UnsupportedEncodingException, JsonProcessingException {
         MovieDto movieDto = new MovieDto(UUID.randomUUID(), "Dead and forgotten ", "Drama", 2021, 9.0);
 
-        when(movieService.addMovie(Mockito.any(MovieDto.class))).thenReturn(movieDto);
+        when(movieService.addMovie(any(MovieDto.class))).thenReturn(movieDto);
 
         MockHttpRequest request = MockHttpRequest.post("/movies");
         request.contentType(MediaType.APPLICATION_JSON);
@@ -96,7 +100,7 @@ class MovieResourceTest {
         UUID testUUID = UUID.randomUUID();
         MovieDto movieDto = new MovieDto(testUUID, "Lalaland", "Comedy", 2022, 7.5);
 
-        when(movieService.updateMovie(Mockito.eq(testUUID), Mockito.any(MovieDto.class))).thenReturn(movieDto);
+        when(movieService.updateMovie(eq(testUUID), any(MovieDto.class))).thenReturn(movieDto);
 
         MockHttpRequest request = MockHttpRequest.put("/movies/" + testUUID.toString());
         request.contentType(MediaType.APPLICATION_JSON);
@@ -113,7 +117,7 @@ class MovieResourceTest {
     void deleteMovieReturnsStatus204() throws URISyntaxException {
         UUID testUUID = UUID.randomUUID();
 
-        Mockito.doNothing().when(movieService).deleteMovie(Mockito.any(UUID.class));
+        Mockito.doNothing().when(movieService).deleteMovie(any(UUID.class));
 
         MockHttpRequest request = MockHttpRequest.delete("/movies/" + testUUID.toString());
         MockHttpResponse response = new MockHttpResponse();
@@ -121,4 +125,18 @@ class MovieResourceTest {
 
         assertEquals(204, response.getStatus());
     }
+
+    @Test
+    @DisplayName("getAllMovies throws exception")
+    public void getAllMoviesThrowsException() throws Exception {
+        when(movieService.getAllMovies()).thenThrow(new RuntimeException("Database error"));
+
+        MockHttpRequest request = MockHttpRequest.get("/movies");
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+
+        assertEquals(500, response.getStatus()); // Assuming you have a handler that converts exceptions to status 500
+    }
+
+
 }
