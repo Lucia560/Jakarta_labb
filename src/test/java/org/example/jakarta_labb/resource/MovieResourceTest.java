@@ -1,97 +1,124 @@
 package org.example.jakarta_labb.resource;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.ws.rs.core.MediaType;
 import org.example.jakarta_labb.dto.MovieDto;
-import org.example.jakarta_labb.entity.Movie;
-import org.example.jakarta_labb.repository.MovieRepository;
+import org.example.jakarta_labb.dto.Movies;
+import org.example.jakarta_labb.service.MovieService;
+import org.jboss.resteasy.mock.MockDispatcherFactory;
+import org.jboss.resteasy.mock.MockHttpRequest;
+import org.jboss.resteasy.mock.MockHttpResponse;
+import org.jboss.resteasy.spi.Dispatcher;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import java.util.List;
-import java.util.UUID;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
-public class MovieResourceTest {
+class MovieResourceTest {
 
     @Mock
-    private MovieRepository movieRepository;
+    MovieService movieService;
+    ObjectMapper objectMapper;
 
-    @InjectMocks
-    private MovieResource movieResource;
+    Dispatcher dispatcher;
 
-    private MovieDto movieDto;
-    private Movie movie;
 
     @BeforeEach
-    void setUp() {
-        UUID movieId = UUID.randomUUID();
-        movieDto = new MovieDto(movieId, "The Shawshank Redemption", "Drama", 1994, 9.3);
-
-        movie = new Movie();
-        movie.setId(movieId);
-        movie.setTitle("The Shawshank Redemption");
-        movie.setGenre("Drama");
-        movie.setReleaseYear(1994);
-        movie.setRating(9.3);
-    }
-
-
-
-    @Test
-    @DisplayName("Return all movies if the list is not empty")
-    void returnAllMoviesIfTheListIsNotEmpty() {
-        when(movieRepository.findAllMovies()).thenReturn(List.of(movie));
-        List<MovieDto> movieDtos = movieResource.getAllMovies().movieDtos();
-        assertNotNull(movieDtos);
-        assertEquals(1, movieDtos.size());
-        assertEquals(movieDto.name(), movieDtos.get(0).name());
-
+    public void setup() {
+        objectMapper = new ObjectMapper();
+        dispatcher = MockDispatcherFactory.createDispatcher();
+        var resource = new MovieResource(movieService);
+        dispatcher.getRegistry().addSingletonResource(resource);
     }
 
     @Test
-    @DisplayName("Get movies by id")
-    void getMovieById() {
-        when(movieRepository.findMovieById(movieDto.uuid())).thenReturn(movie);
-        MovieDto resultDto = movieResource.getMovieById(movieDto.uuid());
-        assertNotNull(resultDto);
-        assertEquals(movieDto.name(), resultDto.name());
+    public void moviesReturnsWithStatus200()  throws Exception{
+        when(movieService.getAllMovies()).thenReturn(new Movies(List.of(), LocalDateTime.now()));
 
+        MockHttpRequest request = MockHttpRequest.get("/movies");
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request,response);
+
+        assertEquals(200,response.getStatus());
+        assertEquals("{\"movieDtos\":[],\"updated\"}", response.getContentAsString());
+    }
+
+
+    @Test
+    @DisplayName("Get movie by ID returns with status 200")
+    public void getMovieByIdReturnsWithStatus200() throws Exception {
+        UUID testUUID = UUID.randomUUID();
+        MovieDto movieDto = new MovieDto(testUUID, "I am dead ", "Action", 2021, 8.5);
+
+        when(movieService.getMovieById(Mockito.any(UUID.class))).thenReturn(movieDto);
+
+        MockHttpRequest request = MockHttpRequest.get("/movies/" + testUUID.toString());
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+
+        assertEquals(200, response.getStatus());
+        assertEquals(objectMapper.writeValueAsString(movieDto), response.getContentAsString());
     }
 
     @Test
-    @DisplayName("Add movie to the list ")
-    void addMovieToTheList() {
-        when(movieRepository.saveMovie(any(Movie.class))).thenReturn(movie);
-        MovieDto savedDto = movieResource.addMovie(movieDto);
-        assertNotNull(savedDto);
-        assertEquals(movieDto.name(), savedDto.name());
+    @DisplayName("Add movie with POST returns 200")
+    void addMovieReturnsStatus200() throws URISyntaxException, UnsupportedEncodingException, JsonProcessingException {
+        MovieDto movieDto = new MovieDto(UUID.randomUUID(), "Dead and forgotten ", "Drama", 2021, 9.0);
 
+        when(movieService.addMovie(Mockito.any(MovieDto.class))).thenReturn(movieDto);
+
+        MockHttpRequest request = MockHttpRequest.post("/movies");
+        request.contentType(MediaType.APPLICATION_JSON);
+        request.content(objectMapper.writeValueAsBytes(movieDto));
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+
+        assertEquals(200, response.getStatus());
+        assertEquals(objectMapper.writeValueAsString(movieDto), response.getContentAsString());
     }
 
     @Test
-    @DisplayName("Update movie and return it ")
-    void updateMovieAndReturnIt() {
-        when(movieRepository.findMovieById(movieDto.uuid())).thenReturn(movie);
-        when(movieRepository.updateMovie(any(Movie.class))).thenReturn(movie);
-        MovieDto updatedDto = movieResource.updateMovie(movieDto.uuid(), movieDto);
-        assertNotNull(updatedDto);
-        assertEquals(movieDto.name(), updatedDto.name());
+    @DisplayName("Update movie with PUT returns 200")
+    void updateMovieReturnsStatus200() throws URISyntaxException, UnsupportedEncodingException, JsonProcessingException {
+        UUID testUUID = UUID.randomUUID();
+        MovieDto movieDto = new MovieDto(testUUID, "Lalaland", "Comedy", 2022, 7.5);
 
+        when(movieService.updateMovie(Mockito.eq(testUUID), Mockito.any(MovieDto.class))).thenReturn(movieDto);
+
+        MockHttpRequest request = MockHttpRequest.put("/movies/" + testUUID.toString());
+        request.contentType(MediaType.APPLICATION_JSON);
+        request.content(objectMapper.writeValueAsBytes(movieDto));
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+
+        assertEquals(200, response.getStatus());
+        assertEquals(objectMapper.writeValueAsString(movieDto), response.getContentAsString());
     }
 
     @Test
-    @DisplayName("Delete movie ")
-    void deleteMovie() {
-        when(movieRepository.findMovieById(movieDto.uuid())).thenReturn(movie);
-        doNothing().when(movieRepository).deleteMovie(any(Movie.class));
-        assertDoesNotThrow(() -> movieResource.deleteMovie(movieDto.uuid()));
+    @DisplayName("Delete movie with DELETE returns 204")
+    void deleteMovieReturnsStatus204() throws URISyntaxException {
+        UUID testUUID = UUID.randomUUID();
+
+        Mockito.doNothing().when(movieService).deleteMovie(Mockito.any(UUID.class));
+
+        MockHttpRequest request = MockHttpRequest.delete("/movies/" + testUUID.toString());
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+
+        assertEquals(204, response.getStatus());
     }
 }
