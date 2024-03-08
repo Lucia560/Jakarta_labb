@@ -2,10 +2,11 @@ package org.example.jakarta_labb.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.MediaType;
 import org.example.jakarta_labb.dto.MovieDto;
 import org.example.jakarta_labb.dto.Movies;
+import org.example.jakarta_labb.exceptionmapper.MovieExceptionMapper;
+import org.example.jakarta_labb.exceptionmapper.MovieNotFoundException;
 import org.example.jakarta_labb.service.MovieService;
 import org.jboss.resteasy.mock.MockDispatcherFactory;
 import org.jboss.resteasy.mock.MockHttpRequest;
@@ -28,8 +29,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class MovieResourceTest {
 
@@ -39,13 +40,13 @@ class MovieResourceTest {
 
     Dispatcher dispatcher;
 
-
     @BeforeEach
     public void setup() {
         objectMapper = new ObjectMapper();
         dispatcher = MockDispatcherFactory.createDispatcher();
         var resource = new MovieResource(movieService);
         dispatcher.getRegistry().addSingletonResource(resource);
+        dispatcher.getProviderFactory().registerProvider(MovieExceptionMapper.class);
     }
 
     @Test
@@ -60,7 +61,6 @@ class MovieResourceTest {
         assertEquals("{\"movieDtos\":[],\"updated\"}", response.getContentAsString());
     }
 
-
     @Test
     @DisplayName("Get movie by ID returns with status 200")
     public void getMovieByIdReturnsWithStatus200() throws Exception {
@@ -74,7 +74,23 @@ class MovieResourceTest {
         dispatcher.invoke(request, response);
 
         assertEquals(200, response.getStatus());
-        assertEquals(objectMapper.writeValueAsString(movieDto), response.getContentAsString());
+        MovieDto actualDto = objectMapper.readValue(response.getContentAsString(), MovieDto.class);
+        assertEquals(movieDto, actualDto);
+    }
+
+    @Test
+    @DisplayName("Get movie by invalid id return status 404")
+    public void getMovieByIdReturnsWithStatus404() throws Exception {
+        UUID testUUID = UUID.randomUUID();
+        MovieDto movieDto = new MovieDto(testUUID, "Gremlins", "Adventure", 1984, 7.3);
+
+        when(movieService.getMovieById(any(UUID.class))).thenThrow(MovieNotFoundException.class);
+
+        MockHttpRequest request = MockHttpRequest.get("/movies/" + testUUID.toString());
+        MockHttpResponse response = new MockHttpResponse();
+        dispatcher.invoke(request, response);
+
+        assertEquals(404, response.getStatus());
     }
 
     @Test
@@ -91,7 +107,8 @@ class MovieResourceTest {
         dispatcher.invoke(request, response);
 
         assertEquals(200, response.getStatus());
-        assertEquals(objectMapper.writeValueAsString(movieDto), response.getContentAsString());
+        MovieDto actualDto = objectMapper.readValue(response.getContentAsString(), MovieDto.class);
+        assertEquals(movieDto, actualDto);
     }
 
     @Test
@@ -109,7 +126,8 @@ class MovieResourceTest {
         dispatcher.invoke(request, response);
 
         assertEquals(200, response.getStatus());
-        assertEquals(objectMapper.writeValueAsString(movieDto), response.getContentAsString());
+        MovieDto actualDto = objectMapper.readValue(response.getContentAsString(), MovieDto.class);
+        assertEquals(movieDto, actualDto);
     }
 
     @Test
@@ -137,5 +155,4 @@ class MovieResourceTest {
 
         assertEquals(500, response.getStatus());
     }
-
 }
