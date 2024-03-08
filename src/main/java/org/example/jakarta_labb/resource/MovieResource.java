@@ -14,11 +14,9 @@ import java.util.UUID;
 @Consumes(MediaType.APPLICATION_JSON)
 public class MovieResource {
 
-   /* @Inject
-    private MovieService movieService;*/
-
     private MovieService movieService;
 
+    // Dummy constructor for CDI
     public MovieResource(){}
 
     @Inject
